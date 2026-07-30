@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Interview Report</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h1>AI Interview Report</h1>
+
+    <h2>Candidate Details</h2>
+
+    <p><strong>Name:</strong> {{ candidate[1] }}</p>
+    <p><strong>Email:</strong> {{ candidate[2] }}</p>
+    <p><strong>Job Role:</strong> {{ candidate[3] }}</p>
+    <p><strong>Experience:</strong> {{ candidate[4] }}</p>
+
+    <h3>📷 Candidate Photo</h3>
+
+    <img src="{{ url_for('static', filename='photos/' ~ candidate[0] ~ '.png') }}"
+         width="220"
+         style="border:2px solid #007BFF;border-radius:10px;">
+
+    <hr>
+
+    <h2>Interview Answers & AI Feedback</h2>
+
+    {% set total = namespace(score=0) %}
+
+    {% for answer in answers %}
+
+        {% set total.score = total.score + answer[2] %}
+
+        <h3>Question {{ loop.index }}</h3>
+
+        <p><strong>Question:</strong></p>
+        <p>{{ answer[0] }}</p>
+
+        <p><strong>Answer:</strong></p>
+        <p>{{ answer[1] }}</p>
+
+        <p><strong>AI Score:</strong> {{ answer[2] }}/10</p>
+
+        {% if answer[2] >= 9 %}
+            <p style="color:green;">
+                ✅ Excellent answer. Clear, detailed and professional.
+            </p>
+
+        {% elif answer[2] >= 7 %}
+            <p style="color:orange;">
+                👍 Good answer. Add a little more detail.
+            </p>
+
+        {% elif answer[2] >= 5 %}
+            <p style="color:orange;">
+                ⚠ Average answer. Explain with an example.
+            </p>
+
+        {% else %}
+            <p style="color:red;">
+                ❌ Weak answer. Needs more explanation.
+            </p>
+
+        {% endif %}
+
+        <hr>
+
+    {% endfor %}
+
+    <h2>Overall Score : {{ total.score }}/50</h2>
+
+    {% if total.score >= 40 %}
+        <h2 style="color:green;">Result : Recommended ✅</h2>
+
+    {% elif total.score >= 30 %}
+        <h2 style="color:orange;">Result : Average ⭐</h2>
+
+    {% else %}
+        <h2 style="color:red;">Result : Needs Improvement ❌</h2>
+
+    {% endif %}
+
+    <br><br>
+
+    <a href="/download_report/{{ candidate[0] }}">
+        <button class="btn">
+            📄 Download PDF Report
+        </button>
+    </a>
+
+    &nbsp;&nbsp;
+
+    <a href="/admin">
+        <button class="btn">
+            Back to Admin
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>

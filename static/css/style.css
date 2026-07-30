@@ -1,0 +1,359 @@
+/* ==========================
+   RESET
+========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ==========================
+   BODY
+========================== */
+
+body{
+
+    background:linear-gradient(135deg,#eef5ff,#d9e9ff);
+
+    min-height:100vh;
+
+}
+
+/* ==========================
+   NAVBAR
+========================== */
+
+.navbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:20px 60px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+}
+
+.logo{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+.menu{
+
+    display:flex;
+
+    list-style:none;
+
+    gap:30px;
+
+}
+
+.menu li a{
+
+    text-decoration:none;
+
+    color:white;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+.menu li a:hover{
+
+    color:#ffd43b;
+
+}
+
+/* ==========================
+   HERO SECTION
+========================== */
+
+.hero{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    min-height:90vh;
+
+    padding:20px;
+
+}
+
+.hero-content{
+
+    width:700px;
+
+}
+
+.hero h1{
+
+    font-size:55px;
+
+    color:#1f2937;
+
+}
+
+.hero p{
+
+    font-size:22px;
+
+    color:#555;
+
+    margin-top:25px;
+
+    line-height:35px;
+
+}
+
+/* ==========================
+   FORM CONTAINER
+========================== */
+
+.form-container{
+
+    width:90%;
+
+    max-width:850px;
+
+    margin:40px auto;
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+}
+
+.form-container h1{
+
+    text-align:center;
+
+
+    margin-bottom:20px;
+
+}
+
+.form-container h2{
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+}
+
+.form-container h3{
+
+    margin-top:20px;
+
+    margin-bottom:15px;
+
+}
+
+/* ==========================
+   INPUTS
+========================== */
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:8px;
+
+    margin-bottom:20px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+}
+
+textarea{
+
+    resize:none;
+
+}
+
+/* ==========================
+   BUTTON
+========================== */
+
+.btn{
+
+    width:100%;
+
+    padding:15px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.btn:hover{
+
+    background:#1d4ed8;
+
+    transform:scale(1.03);
+
+}
+
+/* ==========================
+   TIMER
+========================== */
+
+#timer{
+
+    color:red;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+/* ==========================
+   PROGRESS BAR
+========================== */
+
+.progress-container{
+
+    width:100%;
+
+    height:28px;
+
+    background:#d9d9d9;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    margin:20px 0;
+
+}
+
+.progress-bar{
+
+    height:100%;
+
+    background:linear-gradient(90deg,#2563eb,#38bdf8);
+
+    color:white;
+
+    text-align:center;
+
+    line-height:28px;
+
+    font-weight:bold;
+
+    transition:width .5s ease;
+
+}
+
+/* ==========================
+   CAMERA
+========================== */
+
+video{
+
+    width:100%;
+
+    max-width:450px;
+
+    display:block;
+
+    margin:20px auto;
+
+    border:3px solid #2563eb;
+
+    border-radius:12px;
+
+}
+
+/* ==========================
+   TABLE
+========================== */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+table th{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:12px;
+
+}
+
+table td{
+
+    padding:12px;
+
+    border:1px solid #ddd;
+
+    text-align:center;
+
+}
+
+/* ==========================
+   REPORT
+========================== */
+
+hr{
+
+    margin:25px 0;
+
+}
+
+p{
+
+    line-height:28px;
+
+}

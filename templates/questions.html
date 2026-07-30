@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Questions</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h1>AI Mock Interview</h1>
+
+    <h2 id="timer" style="color:red;">
+        Time Left: 05:00
+    </h2>
+
+    <h2>
+        Question {{ question_number }} of {{ total_questions }}
+    </h2>
+
+    <div class="progress-container">
+        <div class="progress-bar"
+             style="width: {{ (question_number / total_questions) * 100 }}%;">
+            {{ ((question_number / total_questions) * 100) | round | int }}%
+        </div>
+    </div>
+
+    <h3 id="question">
+        {{ question }}
+    </h3>
+
+    <form id="answerForm" action="/questions" method="POST">
+
+    <textarea
+        id="answer"
+        name="answer"
+        rows="8"
+        placeholder="Speak or type your answer..."
+        required></textarea>
+
+    <br><br>
+
+    <div id="feedbackBox"
+         style="display:none;
+                background:#f4f7ff;
+                border:1px solid #007BFF;
+                border-radius:10px;
+                padding:15px;
+                margin-bottom:20px;">
+
+        <h3>🤖 AI Feedback</h3>
+
+        <p><strong>AI Score:</strong>
+            <span id="aiScore"></span>/10
+        </p>
+
+        <p id="aiFeedback"></p>
+
+    </div>
+
+    <button type="submit" class="btn">
+        Next
+    </button>
+
+</form>
+    <hr>
+
+    <h3>📷 Live Camera</h3>
+
+    <video
+        id="video"
+        width="400"
+        height="300"
+        autoplay
+        playsinline
+        style="border:2px solid #007BFF;border-radius:10px;">
+    </video>
+
+    <canvas
+        id="canvas"
+        width="400"
+        height="300"
+        style="display:none;">
+    </canvas>
+
+</div>
+
+<script>
+
+// =====================
+// Page Load
+// =====================
+
+window.onload = function () {
+
+    startCamera();
+
+    speechSynthesis.cancel();
+
+    let question = document.getElementById("question").innerText;
+
+    let speech = new SpeechSynthesisUtterance(question);
+
+    speech.lang = "en-US";
+
+    speech.onend = function () {
+        startRecognition();
+    };
+
+    speechSynthesis.speak(speech);
+
+};
+
+// =====================
+// Camera
+// =====================
+
+function startCamera() {
+
+    navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+    })
+
+    .then(function(stream){
+
+        let video = document.getElementById("video");
+        video.srcObject = stream;
+
+        setTimeout(function(){
+
+            let canvas = document.getElementById("canvas");
+            let context = canvas.getContext("2d");
+
+            context.drawImage(video, 0, 0, 400, 300);
+
+            let image = canvas.toDataURL("image/png");
+
+            fetch("/save_photo", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "image=" + encodeURIComponent(image)
+})
+.then(response => {
+    alert("Status: " + response.status);
+    return response.text();
+})
+.then(data => {
+    alert(data);
+})
+.catch(error => {
+    alert("Error: " + error);
+});
+
+        }, 3000);
+
+    })
+
+    .catch(function(error){
+
+        console.log(error);
+
+    });
+
+}
+
+// =====================
+// Speech Recognition
+// =====================
+
+function startRecognition() {
+
+    if (!('webkitSpeechRecognition' in window)) {
+
+        alert("Please use Google Chrome.");
+
+        return;
+
+    }
+
+    const recognition = new webkitSpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = function () {
+
+        console.log("Microphone Started...");
+
+    };
+
+    recognition.onresult = function(event) {
+
+        let text = event.results[0][0].transcript;
+
+        document.getElementById("answer").value = text;
+
+        console.log("Recognized:", text);
+
+    };
+
+    recognition.onend = function() {
+
+        console.log("Recording Finished");
+
+    };
+
+    recognition.onerror = function(event) {
+
+        console.log(event.error);
+
+        if(event.error=="aborted"){
+            return;
+        }
+
+        alert("Microphone Error: " + event.error);
+
+    };
+
+    recognition.start();
+
+}
+
+// =====================
+// Timer
+// =====================
+
+let time = 300;
+
+setInterval(function(){
+
+    let minutes = Math.floor(time/60);
+
+    let seconds = time%60;
+
+    document.getElementById("timer").innerHTML =
+        "Time Left : " +
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(seconds).padStart(2,"0");
+
+    if(time<=0){
+
+        alert("Interview Time Over!");
+
+        window.location.href="/result";
+
+    }
+
+    time--;
+
+},1000);
+// =====================
+// AI Feedback
+// =====================
+
+document.getElementById("answerForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    let answer = document.getElementById("answer").value;
+
+    fetch("/ai_feedback",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        body:"answer="+encodeURIComponent(answer)
+    })
+
+    .then(response => response.json())
+
+    .then(data=>{
+
+        document.getElementById("feedbackBox").style.display="block";
+
+        document.getElementById("aiScore").innerHTML=data.score;
+
+        document.getElementById("aiFeedback").innerHTML=data.feedback;
+
+        setTimeout(function(){
+
+            document.getElementById("answerForm").submit();
+
+        },3000);
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

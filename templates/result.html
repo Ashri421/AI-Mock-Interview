@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Result</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h1>🎉 AI Mock Interview Completed</h1>
+
+    <h2>Thank You!</h2>
+
+    <p>Your interview has been completed successfully.</p>
+
+    <hr>
+
+    <h2>Your Performance</h2>
+
+    <h1 style="color:#007BFF;">{{ total_score }}/50</h1>
+
+    <h2>Percentage : {{ percentage }}%</h2>
+
+    <!-- Pie Chart -->
+    <div style="width:300px;margin:auto;">
+        <canvas id="resultChart"></canvas>
+    </div>
+
+    <script>
+    const ctx = document.getElementById("resultChart");
+
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Score", "Remaining"],
+            datasets: [{
+                data: [{{ correct }}, {{ wrong }}],
+                backgroundColor: [
+                    "#4CAF50",
+                    "#E0E0E0"
+                ]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+    </script>
+
+    <hr>
+
+    <!-- STAR RATING -->
+
+    {% if percentage >= 80 %}
+
+        <h2 style="color:green;">⭐⭐⭐⭐⭐ (5/5)</h2>
+
+    {% elif percentage >= 60 %}
+
+        <h2 style="color:orange;">⭐⭐⭐⭐ (4/5)</h2>
+
+    {% elif percentage >= 40 %}
+
+        <h2 style="color:blue;">⭐⭐⭐ (3/5)</h2>
+
+    {% else %}
+
+        <h2 style="color:red;">⭐⭐ (2/5)</h2>
+
+    {% endif %}
+
+    <hr>
+
+    {% if percentage >= 80 %}
+
+        <h2 style="color:green;">🏆 Excellent Performance</h2>
+
+        <p>✔ Excellent communication skills.</p>
+        <p>✔ Very confident answers.</p>
+        <p>✔ Strong interview performance.</p>
+
+    {% elif percentage >= 60 %}
+
+        <h2 style="color:orange;">⭐ Good Performance</h2>
+
+        <p>✔ Good communication.</p>
+        <p>✔ Improve answer quality with examples.</p>
+        <p>✔ Practice technical questions.</p>
+
+    {% else %}
+
+        <h2 style="color:red;">⚠ Needs Improvement</h2>
+
+        <p>✔ Improve communication skills.</p>
+        <p>✔ Give more detailed answers.</p>
+        <p>✔ Practice mock interviews regularly.</p>
+
+    {% endif %}
+
+    <hr>
+
+    {% if percentage >= 70 %}
+
+        <h2 style="color:green;">
+            ✅ Recommendation Status : Recommended
+        </h2>
+
+    {% else %}
+
+        <h2 style="color:red;">
+            ❌ Recommendation Status : Needs Improvement
+        </h2>
+
+    {% endif %}
+
+    <hr>
+
+    <h2>Next Steps</h2>
+
+    <p>📌 Review your interview report from the Admin Panel.</p>
+    <p>📌 Improve weak answers and attempt another interview.</p>
+    <p>📌 Keep practicing to increase your score.</p>
+
+    <br>
+
+    <a href="/">
+        <button class="btn">🏠 Home</button>
+    </a>
+
+    &nbsp;
+
+    <a href="/interview">
+        <button class="btn">🔁 Try Again</button>
+    </a>
+
+    <br><br>
+
+    <a href="/login">
+        <button class="btn">🔐 Admin Panel</button>
+    </a>
+
+</div>
+
+</body>
+</html>

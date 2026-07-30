@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Candidate Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="form-container">
+
+        <h1>Candidate Dashboard</h1>
+
+        <h2>👤 Name</h2>
+        <p>{{ name }}</p>
+
+        <h2>📧 Email</h2>
+        <p>{{ email }}</p>
+
+        <h2>💼 Job Role</h2>
+        <p>{{ job_role }}</p>
+
+        <h2>🎓 Experience</h2>
+        <p>{{ experience }}</p>
+
+        <br>
+
+        <a href="/questions">
+            <button class="btn">
+                Begin AI Interview
+            </button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>

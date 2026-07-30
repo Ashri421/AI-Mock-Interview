@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Interview Answers</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h1>Interview Answers</h1>
+
+    {% if answers %}
+
+    <table border="1" cellpadding="10" cellspacing="0" width="100%">
+
+        <tr>
+            <th>Candidate</th>
+            <th>Question</th>
+            <th>Answer</th>
+        </tr>
+
+        {% for answer in answers %}
+
+        <tr>
+            <td>{{ answer[0] }}</td>
+            <td>{{ answer[1] }}</td>
+            <td>{{ answer[2] }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <h3>No interview answers found.</h3>
+
+    {% endif %}
+
+    <br><br>
+
+    <a href="/admin">
+        <button class="btn">
+            Back to Admin
+        </button>
+    </a>
+
+</div>
+
+</body>
+
+</html>

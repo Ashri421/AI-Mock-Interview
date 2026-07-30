@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Mock Interview - Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <!-- HEADER -->
+
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+
+        <div>
+
+            <h1 style="color:#2563eb;">
+                🤖 AI Mock Interview Dashboard
+            </h1>
+
+            <p style="color:gray;">
+                Recruiter Panel
+            </p>
+
+        </div>
+
+        <a href="/logout">
+            <button class="btn" style="background:#ef4444;">
+                Logout
+            </button>
+        </a>
+
+    </div>
+
+    <hr>
+
+    <!-- DASHBOARD CARDS -->
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+        gap:20px;
+        margin:25px 0;">
+
+        <div style="
+            background:#2563eb;
+            color:white;
+            padding:20px;
+            border-radius:15px;
+            text-align:center;
+            box-shadow:0px 5px 15px rgba(0,0,0,0.2);">
+
+            <h1 style="color:white;font-size:42px;">
+                {{ candidates|length }}
+            </h1>
+
+            <p>Total Candidates</p>
+
+        </div>
+
+        <div style="
+            background:#16a34a;
+            color:white;
+            padding:20px;
+            border-radius:15px;
+            text-align:center;
+            box-shadow:0px 5px 15px rgba(0,0,0,0.2);">
+
+            <h1 style="color:white;font-size:42px;">
+                {{ candidates|length }}
+            </h1>
+
+            <p>Total Interviews</p>
+
+        </div>
+
+        <div style="
+            background:#f59e0b;
+            color:white;
+            padding:20px;
+            border-radius:15px;
+            text-align:center;
+            box-shadow:0px 5px 15px rgba(0,0,0,0.2);">
+
+            <h1 style="color:white;font-size:42px;">
+                {{ highest_score }}/50
+            </h1>
+
+            <p>Highest Score</p>
+
+        </div>
+
+        <div style="
+            background:#dc2626;
+            color:white;
+            padding:20px;
+            border-radius:15px;
+            text-align:center;
+            box-shadow:0px 5px 15px rgba(0,0,0,0.2);">
+
+            <h1 style="color:white;font-size:42px;">
+                {{ average_score }}/50
+            </h1>
+
+            <p>Average Score</p>
+
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <form method="GET" action="/admin">
+
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="🔍 Search Candidate">
+
+        <br><br>
+
+        <button class="btn" type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/chart">
+    <button class="btn">
+        📊 Generate Performance Chart
+    </button>
+</a>
+
+<br><br>
+
+<a href="/export_excel">
+    <button class="btn" style="background:#2563eb;">
+        📥 Export Candidates to Excel
+    </button>
+</a>
+
+<br><br>
+    {% if candidates|length > 0 %}
+
+    <h2>Candidate Performance</h2>
+
+    <img
+        src="{{ url_for('static', filename='images/chart.png') }}"
+        width="100%"
+        style="border-radius:12px;border:1px solid #ddd;box-shadow:0px 5px 15px rgba(0,0,0,0.2);">
+
+    <br><br>
+
+    {% endif %}
+
+    <!-- TABLE -->
+
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Experience</th>
+            <th>Score</th>
+            <th>Percentage</th>
+            <th>Status</th>
+            <th>Report</th>
+
+        </tr>
+
+        {% for candidate in candidates %}
+
+        <tr>
+
+            <td>{{ candidate.id }}</td>
+
+            <td>
+                <img src="{{ url_for('static', filename='photos/' + candidate.id|string + '.png') }}"
+                     width="70"
+                     height="70"
+                     style="border-radius:50%;object-fit:cover;border:2px solid #2563eb;">
+            </td>
+
+            <td>{{ candidate.name }}</td>
+
+            <td>{{ candidate.email }}</td>
+
+            <td>{{ candidate.job_role }}</td>
+
+            <td>{{ candidate.experience }}</td>
+
+            <td>{{ candidate.score }}/50</td>
+
+            <td>{{ candidate.percentage }}%</td>
+
+            <td>
+
+                {% if candidate.percentage >= 70 %}
+
+                    <span style="color:green;font-weight:bold;">
+                        Recommended ✅
+                    </span>
+
+                {% elif candidate.percentage >= 50 %}
+
+                    <span style="color:orange;font-weight:bold;">
+                        Average ⭐
+                    </span>
+
+                {% else %}
+
+                    <span style="color:red;font-weight:bold;">
+                        Needs Improvement ❌
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+    <a href="/report/{{ candidate.id }}">
+        <button class="btn">
+            View Report
+        </button>
+    </a>
+
+    <br><br>
+
+    <a href="/download_report/{{ candidate.id }}">
+        <button class="btn" style="background:#16a34a;">
+            Download PDF
+        </button>
+    </a>
+
+    <br><br>
+
+    <a href="/delete_candidate/{{ candidate.id }}"
+       onclick="return confirm('Are you sure you want to delete this candidate?');">
+
+        <button class="btn" style="background:red;">
+            🗑 Delete
+        </button>
+
+    </a>
+
+</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>
